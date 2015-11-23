@@ -129,7 +129,8 @@ public class DatabaseConnection
 	
 	public ArrayList<String> getAllItemInformation() throws Exception
 	{
-		ArrayList<String> arraylist = new ArrayList<String>();
+		//ArrayList<String> arraylist = new ArrayList<String>();
+		String s = "";
 		Statement st = getConnection().createStatement();
 		String sql = "select * from items";
 		ResultSet rs = st.executeQuery(sql);
@@ -137,10 +138,14 @@ public class DatabaseConnection
 		{
 			for(int i = 1; i <= 9; i++)
 			{
-				arraylist.add(rs.getString(i)+":");	// all the information added into the arraylist with ":"
+				//arraylist.add(rs.getString(i)+": ");	// all the information added into the arraylist with ":"
+				s += rs.getString(i);
+				if(i == 9)
+					s += "\n";
 			}
 		}
-		return arraylist;
+		//return arraylist;
+		return s;
 	}
 	
 	/*
