@@ -129,23 +129,18 @@ public class DatabaseConnection
 	
 	public ArrayList<String> getAllItemInformation() throws Exception
 	{
-		//ArrayList<String> arraylist = new ArrayList<String>();
-		String s = "";
+		ArrayList<String> arraylist = new ArrayList<String>();
 		Statement st = getConnection().createStatement();
 		String sql = "select * from items";
 		ResultSet rs = st.executeQuery(sql);
 		while(rs.next())
 		{
-			for(int i = 1; i <= 9; i++)
+			for(int i = 1; i <= 9; i++)		// 9 is the column number in database
 			{
-				//arraylist.add(rs.getString(i)+": ");	// all the information added into the arraylist with ":"
-				s += rs.getString(i);
-				if(i == 9)
-					s += "\n";
+				arraylist.add(rs.getString(i)+":");	// all the information added into the arraylist with ":"
 			}
 		}
-		//return arraylist;
-		return s;
+		return arraylist;
 	}
 	
 	/*
