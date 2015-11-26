@@ -1,6 +1,7 @@
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -26,11 +27,11 @@ public abstract class Item implements PriceInterface{
    */
   public Item(String item_name, String price,
               String id, String dir, ItemType type){
-    this._name      = new String(item_name);
-    this._price     = new BigDecimal(price);
-    this._item_id   = Integer.parseInt(id);
-    this._icon_path = dir;
-    this._type      = type;
+    this._name      = (item_name != null)? new String(item_name): "N/A";
+    this._price     = (price != null)? new BigDecimal(price): new BigDecimal(1);
+    this._item_id   = (id != null)? Integer.parseInt(id): 0;
+    this._icon_path = (dir != null)? dir: "/default.png";
+    this._type      = (type != null)? type: ItemType.DEFAULT;
   } // END CONSTRUCTOR
 
   /**
@@ -97,4 +98,36 @@ public abstract class Item implements PriceInterface{
    * @return INFORMATION ABOUT THIS TIME (STRING)
    */
   public abstract String get_info();
+
+  //////////////////////////// TEST ///////////////////////////////////////////
+  public static void main(String[] args) {
+    Item soda = new Refreshment(
+        "SODA", "2.99", "1", "160", "/PATH.png",ItemType.valueOf("SODA")
+    );
+    Item snack = new Refreshment(
+        "SNACK", "3.99", "2", "250", "/snack.png", ItemType.valueOf("SNACK")
+    );
+    Item book = new HandBook(
+        "BOOK", "4.5", "3", "AUTHOR", "ISBN123",
+        "/book.png", ItemType.valueOf("GRADE_BOOK")
+    );
+
+    ArrayList<Item> list = new ArrayList<>();
+    list.add(soda);
+    list.add(snack);
+    list.add(book);
+
+    for(Item i : list){
+      System.out.println(i.get_info());
+      System.out.println("----------------------------");
+      System.out.println("price : " + i.get_price());
+      System.out.println("----------------------------");
+      System.out.println("name : " + i.get_name());
+      System.out.println("id : " + i.get_id());
+      System.out.println("type : " + i.get_type().toString());
+      System.out.println("icon_path : " + i.get_icon_path());
+      System.out.println("----------------------------");
+      System.out.println(">>>>>>>>>>>>>>>>>>");
+    }
+  }
 }

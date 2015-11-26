@@ -19,8 +19,8 @@ public class HandBook extends Item {
   public HandBook(String item_name, String price, String id,
                   String author,String isbn, String path, ItemType it){
     super(item_name, price, id, path, it);
-    this._author = author;
-    this._isbn = isbn;
+    this._author = (author != null)? author: "ANONYMOUS";
+    this._isbn = (isbn != null)? isbn: "DEFAULT ISBN";
   } // END CONSTRUCTOR
 
   /**

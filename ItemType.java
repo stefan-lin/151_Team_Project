@@ -5,5 +5,5 @@ public enum ItemType {
   SODA,
   SNACK,
   GRADE_BOOK,
-  GUM
+  DEFAULT
 }

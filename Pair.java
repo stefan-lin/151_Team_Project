@@ -35,4 +35,9 @@ public class Pair<L, R> {
              this._right.equals(comparee._right);
     }
   } // END equals METHOD
+
+  @Override
+  public String toString(){
+    return this._left.toString() + "@" + this._right.toString();
+  }
 }

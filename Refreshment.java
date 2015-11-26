@@ -19,7 +19,7 @@ public class Refreshment extends Item {
   public Refreshment(String item_name, String price, String id,
                      String cal, String path, ItemType it) {
     super(item_name, price, id, path, it);
-    this._calories = new BigDecimal(cal);
+    this._calories = (cal != null)? new BigDecimal(cal): new BigDecimal(100);
   }
 
   /**

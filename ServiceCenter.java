@@ -30,11 +30,14 @@ public class ServiceCenter implements Observer {
   @Override
   public void update(Observable o, Object arg) {
     if(o instanceof VendingMachine){
+      // TEST ///////////////////////////////////////////////////////////////
+      System.out.println("INVENTORY UPDATED....");
+      ///////////////////////////////////////////////////////////////////////
       String request_message = this._make_request_str(
           ((VendingMachine) o).restock_check()
       );
       try {
-        this._make_request_to_server(request_message);
+        this._send_request_to_server(request_message);
       } catch (IOException e) {
         String err_fmt = "[ERROR] FAIL TO TALK TO (DOMAIN : %s, SOCKET : %d)\n";
         System.err.println(String.format(
@@ -49,15 +52,16 @@ public class ServiceCenter implements Observer {
     String message = this._account;
     for(Pair<String, Integer> p : list){
       message += ":";
-      message += p.get_left();
-      message += ":";
-      message += p.get_right().toString();
+      //message += p.get_left();
+      //message += ":";
+      //message += p.get_right().toString();
+      message += p.toString();
       message += ":";
     } // END FOR
     return message;
   } // END _make_request_str METHOD
 
-  private void _make_request_to_server(String message) throws IOException {
+  private void _send_request_to_server(String message) throws IOException {
     this._socket = new Socket(this._domain_name, this._port_num);
     OutputStream output_hdlr = this._socket.getOutputStream();
     output_hdlr.write(message.getBytes());

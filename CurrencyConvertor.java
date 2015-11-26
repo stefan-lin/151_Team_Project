@@ -5,6 +5,13 @@ import java.util.Locale;
 /**
  * Created by Lambda on 11/16/2015.
  */
+
+/**
+ * CurrencyConvertor
+ *
+ * THIS IS A CLASS THAT PROVIDES FUNCTIONALITY TO CONVERT BIGDECIMAL/DOUBLE
+ * OBJECT INTO USD FORMAT (STRING)
+ */
 public final class CurrencyConvertor {
   private static NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
 
