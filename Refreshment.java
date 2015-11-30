@@ -31,9 +31,9 @@ public class Refreshment extends Item {
    */
   @Override
   public String get_info() {
-    String name_fmt  = "Name     : %s\n";
-    String price_fmt = "Price    : %s\n";
-    String cal_fmt   = "Calories : %s\n";
+    String name_fmt  = "Name : %s. ";
+    String price_fmt = "Price : %s. ";
+    String cal_fmt   = "Calories : %s. ";
     String name_str = String.format(name_fmt, this._name);
     String price_str = String.format(price_fmt,
         CurrencyConvertor.convert_to_USD_fmt(this._price));

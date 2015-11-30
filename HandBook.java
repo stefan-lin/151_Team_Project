@@ -32,10 +32,10 @@ public class HandBook extends Item {
    */
   @Override
   public String get_info(){
-    String name_fmt   = "Name     : %s\n";
-    String price_fmt  = "Price    : %s\n";
-    String author_fmt = "Author   : %s\n";
-    String isbn_fmt   = "ISBN     : %s\n";
+    String name_fmt   = "Name : %s. ";
+    String price_fmt  = "Price : %s. ";
+    String author_fmt = "Author : %s. ";
+    String isbn_fmt   = "ISBN : %s. ";
 
     return
         String.format(name_fmt, this._name)+

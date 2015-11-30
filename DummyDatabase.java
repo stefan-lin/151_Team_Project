@@ -82,30 +82,18 @@ public class DummyDatabase extends DatabaseConnection{
   }
 
   public ArrayList<String> init_item_input() {
-    String item0  = "coke:1:1.75:6:/desktop/pictures/1.jpg:null:null:SODA:160:";
-    String item1  = "pepsi:2:1.75:6:/desktop/pictures/2.jpg:null:null:SODA:160:";
-    String item2  = "crush:3:1.75:6:/desktop/pictures/3.jpg:null:null:SODA:155:";
-    String item3  = "royal:4:2.25:6:/desktop/pictures/4.jpg:null:null:SODA:170:";
-    String item4  = "Peanut M&M's:5:1.75:6:/desktop/pictures/5.jpg:null:null:SNACK:250:";
-    //String item23 = "Boston Baked Beans:6:2.5:12:/desktop/pictures/6.jpg:null:null:SNACK:200:";
-    String item5  = "item11:11:9.21:6:/desktop/pictures/11.jpg:Smith:1111:GRADE_BOOK:0:";
-    String item6  = "Cheetos Crunchy:7:1.75:6:/desktop/pictures/7.jpg:null:null:SNACK:160:";
-    String item7  = "Sun Chips Original:8:1.75:6:/desktop/pictures/8.jpg:null:null:SNACK:140:";
-    String item8  = "Mini Pretzels:9:1.25:6:/desktop/pictures/9.jpg:null:null:SNACK:110:";
-    String item9  = "Fig Newtons:10:1.5:10:/desktop/pictures/10.jpg:null:null:SNACK:200:";
-    String item10 = "grade_book1:12:11.11:6:/desktop/pictures/12.jpg:Thomas:1212:GRADE_BOOK:0:";
-    //String item11 = "grade_book2:13:7.42:10:/desktop/pictures/13.jpg:Michael:1313:GRADE_BOOK:0:";
-    //String item12 = "grade_book3:14:10.32:18:/desktop/pictures/14.jpg:Johnson:1414:GRADE_BOOK:0:";
-    String item13 = "sprite:15:1.75:2:/desktop/pictures/15.jpg:::SODA:200:";
-    //String item14 = "7-up:16:3.25:8:/desktop/pictures/16.jpg:::SODA:140:";
-    //String item15 = "Mountain Dew:17:3.25:30:/desktop/pictures/17.jpg:::SODA:0:";
-    //String item16 = "coca cola:18:3.25:30:/desktop/pictures/18.jpg:::SODA:0:";
-    //String item17 = "diet coke:19:1.75:30:/desktop/pictures/19.jpg:::SODA:0:";
-    //String item18 = "diet pepsi:20:1.75:30:/desktop/pictures/20.jpg:::SODA:0:";
-    //String item19 = "trident:21:1.99:30:/desktop/pictures/21.jpg:::GUM:0:";
-    //String item20 = "extra:22:1.99:30:/desktop/pictures/22.jpg:::GUM:0:";
-    //String item21 = "stride:23:2.59:30:/desktop/pictures/23jpg:::GUM:0:";
-    //String item22 = "eclipse:24:3.99:30:/desktop/pictures/24.jpg:::GUM:0:";
+    String item0  = "coke:1:1.75:6:coke.png:null:null:SODA:160:";
+    String item1  = "pepsi:2:1.75:6:pepsi.png:null:null:SODA:160:";
+    String item2  = "beer:3:1.75:6:beer.png:null:null:SODA:155:";
+    String item3  = "fanta:4:2.25:6:fanta.png:null:null:SODA:170:";
+    String item4  = "pretzel:5:1.75:6:pretzel.png:null:null:SNACK:250:";
+    String item5  = "book:6:9.21:6:book.png:Smith:1111:GRADE_BOOK:null:";
+    String item6  = "egg:7:1.75:6:egg.png:null:null:SNACK:160:";
+    String item7  = "sandwich:8:1.75:6:sandwich.png:null:null:SNACK:140:";
+    String item8  = "hamburger:9:1.25:6:hamburger.png:null:null:SNACK:110:";
+    String item9  = "donut:10:1.5:10:donut.png:null:null:SNACK:200:";
+    String item10 = "grade_book1:11:11.11:6:grade_book1.png:Thomas:1212:GRADE_BOOK:null:";
+    String item13 = "heineken:12:1.75:12:heineken.png:::SODA:200:";
 
     ArrayList<String> input = new ArrayList<>(12);
     input.add(item0);

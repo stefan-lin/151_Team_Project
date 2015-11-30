@@ -25,46 +25,28 @@ public class RequestServer {
 
   private final int _NUM_THREADS = 32;
 
-  // GUI //////////////////////////////////////////////////////////////////////
-  //public JFrame frame;
-  //public JTextArea text_area;
-  //public JTextArea server_area;
-
-
-  //private void _init_GUI(){
-  //  frame = new JFrame("Requests Handling Server");
-  //  frame.setPreferredSize(new Dimension(
-  //      Toolkit.getDefaultToolkit().getScreenSize().height * 2 / 3,
-  //      Toolkit.getDefaultToolkit().getScreenSize().width * 2 / 3
-  //  ));
-  //  frame.setLayout(new FlowLayout());
-
-  //  text_area = new JTextArea(30, 50);
-  //  server_area = new JTextArea(30, 50);
-
-  //  text_area.setBorder(new TitledBorder("Slave"));
-  //  server_area.setBorder(new TitledBorder("Master"));
-  //  text_area.setBackground(Color.YELLOW);
-  //  server_area.setBackground(Color.BLUE);
-
-  //  text_area.setEnabled(false);
-  //  frame.add(text_area);
-  //  frame.add(server_area);
-
-  //  frame.pack();
-  //  frame.setVisible(true);
-  //}
-  /////////////////////////////////////////////////////////////////////////////
-
+  /**
+   * CONSTRUCTOR
+   *
+   * GENERATE A REQUEST SERVER OBJECT AND ALSO INITIATE THE SERVER OPERATIONS
+   *
+   * @param domain   DOMAIN NAME OF THE SERVER
+   * @param port_num PORT THAT SERVER LISTENS TO
+   */
   public RequestServer(String domain, int port_num){
     this._domain = domain;
     this._port_num = port_num;
 
     this._init();
-    //this._init_GUI();
     this._run_server();
   }
 
+  /**
+   * _init METHOD (PRIVATE)
+   *
+   * CREATING THE SERVER BASED ON THE DOMAIN NAME AND PORT NUMBER PROVIDED BY
+   * THE USER.
+   */
   private void _init(){
     this._thread_pool = Executors.newFixedThreadPool(this._NUM_THREADS);
     try {
@@ -78,17 +60,19 @@ public class RequestServer {
     this._list = new ArrayList<Future<String>>();
   } // END init METHOD
 
+  /**
+   * _run_server METHOD (PRIVATE)
+   *
+   * START THE SERVER LOOP; IF THERE IS A CLIENT CONNECTING TO THE SERVER, IT
+   * WOULD GENERATE A CHILD THREAD TO HANDLE THE WORK.
+   */
   private void _run_server(){
     System.out.println("WAITING FOR CONNECTION....");
-    //server_area.append("WAITING FOR CONNECTION....\n");
     while(true){
       Socket client = null;
       try{
         client = this._server_socket.accept();
         System.out.println("RELIEVED A CLIENT");
-        //synchronized (server_area) {
-        //  server_area.append("RELIEVED A CLIENT\n");
-        //}
       }
       catch(IOException e){
         e.printStackTrace();
@@ -100,15 +84,10 @@ public class RequestServer {
       ));
 
       if(this._list.size() == 5){
-        //System.out.println("GOT 5 REQUESTS!");
         synchronized (this._list){
-          //System.out.println("List size : " + this._list.size());
           for(Future<String> fu: this._list){
             try {
               System.out.println("TEMP --->" + fu.get());
-              //synchronized (server_area) {
-              //  server_area.append(fu.get() + "\n");
-              //}
             } catch (InterruptedException e) {
               e.printStackTrace();
             } catch (ExecutionException e) {
@@ -116,35 +95,55 @@ public class RequestServer {
             }
           }
           this._list.clear();
-          //System.out.println("List size : " + this._list.size());
         } // END synchronized BLOCK
       }
 
     } // END WHILE
   } // END _run_server METHOD
 
+
+  /**
+   * Worker CLASS
+   *
+   * THE WORKER CLASS IMPLEMENTS THE CALLABLE CLASS; IT WOULD PROCESS THE REQUEST
+   * STRING AND RETURN THE REQUEST "ORDER" BACK TO THE MAIN THREAD.
+   */
   public class Worker implements Callable {
     private Socket _client_socket = null;
     private String _result = null;
 
+
+    /**
+     * CONSTRUCTOR
+     *
+     * GENERATE A WORKER OBJECT AND ALSO SET UP THE CONNECTION INFORMATION (
+     * SOCKET INFORMATION )
+     *
+     * @param client SOCKET OBJECT THAT REPRESENTS THE CLIENT CONNECTION
+     */
     public Worker(Socket client){
       this._client_socket = client;
     }
 
+    /**
+     * call METHOD (PUBLIC OVERRIDE)
+     *
+     * THIS METHOD WILL GET THE REQUEST STRING IN BYTE ARRAY AND CONVERT IT INTO
+     * A REGULAR STRING WHICH CONTAINS THE REQUESTING ORDER AND THEN RETURN THIS
+     * REQUESTING ORDER STRING.
+     *
+     * @return REQUESTING ORDER STRING
+     */
     @Override
     public String call(){
       try {
         InputStream input  = this._client_socket.getInputStream();
         System.out.println("LocaleHost OK.");
-        //synchronized (text_area) {
-        //  text_area.append("LocaleHost OK.\n");
-        //}
+
         this._result = new Scanner(input, "UTF-8").useDelimiter("\\A").next();
         System.out.println("REQUEST : " + this._result);
         input.close();
-        //synchronized (text_area) {
-        //  text_area.append(this._result + "\n");
-        //}
+
         return this._result;
       }
       catch (IOException e) {
@@ -157,7 +156,7 @@ public class RequestServer {
       return this._result;
     }
   } // END Worker CLASS
-  ///////////////////////////// TEST //////////////////////////////////////////
+  //////////////////////// RUN SERVER //////////////////////////////////////////
   public static void main(String[] args) {
     RequestServer s = new RequestServer("localhost", 8080);
     //s.display_requests();

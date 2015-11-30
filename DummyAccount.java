@@ -1,26 +1,36 @@
 /**
  * Created by Lambda on 11/15/2015.
  */
+
 public class DummyAccount extends Student{
+  String student_id = "1";
+  String student_pwd = "1";
+  double student_balance = 100.00;
   @Override
   public boolean checkID(String usrID, String usrPWD){
-    return true;
+    if(usrID.compareTo(student_id) == 0 &&
+        usrPWD.compareTo(student_pwd) == 0) {
+      return true;
+    }
+    return false;
   }
-
-  // FACTORY METHOD
-  //public Student create_section(String id){
-  //  return new Student("TEST_NAME", "0001", "500.00");
-  //}
 
   @Override
   public boolean pay(String id, double due_amount){
     // CHANGE BALANCE HERE
-    return true;
+    if(id.compareTo(this.student_id) == 0 &&
+        this.student_balance > due_amount) {
+      return true;
+    }
+    return false;
   }
 
   @Override
   public double getBal(String id){
-    return 100.0;
+    if(id.compareTo(this.student_id)== 0){
+      return this.student_balance;
+    }
+    return -1;
   } // get_balance
 
   @Override

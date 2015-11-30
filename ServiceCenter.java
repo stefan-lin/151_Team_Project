@@ -19,6 +19,15 @@ public class ServiceCenter implements Observer {
   private int          _port_num    = -1;
   private String       _domain_name = null;
 
+  /**
+   * CONSTRUCTOR
+   *
+   * TAKING INPUT FROM USER AND PRODUCE A SERVICE CENTER OBJECT
+   *
+   * @param domain   DOMAIN NAME (SERVER DOMAIN NAME)
+   * @param port_num PORT NUMBER TO COMMUNICATE WITH SERVER
+   * @throws IOException INDICATES IF THE FAILURE OF CONNECTION TO SERVER
+   */
   public ServiceCenter(String domain, int port_num) throws IOException {
     this._port_num    = port_num;
     this._domain_name = domain;
@@ -27,6 +36,16 @@ public class ServiceCenter implements Observer {
     this._socket      = null;
   }
 
+  /**
+   * update METHOD (PUBLIC)
+   *
+   * OBSERVER METHOD TO GET THE UPDATES FROM THE OBSERVABLES; AFTER RECEIVING
+   * NOTIFICATION FROM THE OBSERVABLES, IT WOULD FIRST GENERATE THE REQUEST
+   * STRING AND THEN SEND THE REQUEST TO THE SERVER. (ORDERING)
+   *
+   * @param o   OBSERVABLE OBJECT - VENDING MACHINE
+   * @param arg OBSERVABLE ARGUMENT
+   */
   @Override
   public void update(Observable o, Object arg) {
     if(o instanceof VendingMachine){
@@ -48,6 +67,16 @@ public class ServiceCenter implements Observer {
     } // END IF
   }
 
+  /**
+   * _make_request_str METHOD (PRIVATE)
+   *
+   * TAKING AN ARRAYLIST OF ITEMS THAT NEEDED TO BE RESTOCKED AND MAKE THE
+   * REQUEST STRING
+   *
+   * @param list ARRAYLIST THAT CONTAINS THE PAIR OF PRODUCT ID AND NUMBER OF
+   *             RESTOCK ITEMS
+   * @return REQUEST STRING (ACCOUNT NUMBER : PRODUCT ID @ NUMBER TO RESTOCK)
+   */
   private String _make_request_str(ArrayList<Pair<String, Integer>> list){
     String message = this._account;
     for(Pair<String, Integer> p : list){
@@ -61,6 +90,14 @@ public class ServiceCenter implements Observer {
     return message;
   } // END _make_request_str METHOD
 
+  /**
+   * _send_request_to_server METHOD (PRIVATE)
+   *
+   * SENDING REQUEST STRING TO THE SERVER
+   *
+   * @param message INDICATES THE REQUESTING ORDER STRING
+   * @throws IOException INDICATES THE FAILURE OF CONNECTION TO THE SERVER
+   */
   private void _send_request_to_server(String message) throws IOException {
     this._socket = new Socket(this._domain_name, this._port_num);
     OutputStream output_hdlr = this._socket.getOutputStream();
@@ -70,6 +107,13 @@ public class ServiceCenter implements Observer {
     this._socket.close();
   }
 
+  /**
+   * disconnect_socket METHOD (PUBLIC)
+   *
+   * DISCONNECT FROM THE SERVER
+   *
+   * @throws IOException FAILURE TO CLOSE THE CONNECTION
+   */
   public void disconnect_socket() throws IOException {
     this._socket.close();
   }
