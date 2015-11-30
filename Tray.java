@@ -20,6 +20,7 @@ public class Tray {
   private String      _item_name  = null;
   private String      _item_price = null;
   private String      _icon_dir   = null;
+  private String      _item_id    = null;
 
   /**
    * CONSTRUCTOR
@@ -78,12 +79,14 @@ public class Tray {
       this._item_name  = item.get_name();
       this._item_price = CurrencyConvertor.convert_to_USD_fmt(item.get_price());
       this._icon_dir   = item.get_icon_path();
+      this._item_id    = String.valueOf(item.get_id());
+      //System.out.println(this._item_id);
     }
     if(!this.is_full()) {
       this._tray.add(item);
       return;
     }
-    throw new IndexOutOfBoundsException("[ERROR] TRY IS FULL.\n");
+    //throw new IndexOutOfBoundsException("[ERROR] TRY IS FULL.\n");
   }
 
   /**
@@ -98,7 +101,8 @@ public class Tray {
     if(!this.is_empty()) {
       return this._tray.remove();
     }
-    throw new IndexOutOfBoundsException("[ERROR] TRAY IS EMPTY.\n");
+    return null;
+    //throw new IndexOutOfBoundsException("[ERROR] TRAY IS EMPTY.\n");
   }
 
   /**
@@ -138,7 +142,8 @@ public class Tray {
     if(this._tray.size() != 0){
       return this._tray.peek().get_info();
     }
-    throw new ArrayIndexOutOfBoundsException("EMPTY TRAY.\n");
+    return "";
+    //throw new ArrayIndexOutOfBoundsException("EMPTY TRAY.\n");
   }
 
   /**
@@ -176,6 +181,9 @@ public class Tray {
   public final BigDecimal get_item_price(){
     //return this._tray.peek().get_price();
     PriceInterface pInterface = null;
+    if(this._tray.size() == 0){
+      return new BigDecimal("0");
+    }
     switch(this._tray.peek().get_type()){
       case SODA:
         pInterface = new RecycleTaxableItem(this._tray.peek());
@@ -200,7 +208,8 @@ public class Tray {
    * @return STRING CONTAINS PRODUCT ID
    */
   public final String get_containing_product_id(){
-    return new Integer(_tray.peek().get_id()).toString();
+    //return new Integer(_tray.peek().get_id()).toString();
+    return this._item_id;
   }
 
   /**

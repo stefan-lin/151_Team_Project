@@ -161,7 +161,8 @@ public class VendingMachine extends Observable{
       tray_ref = this._tray_lists.get(tray_id);
       return tray_ref.get_item_info();
     }
-    throw new ArrayIndexOutOfBoundsException("TRAY LIST OUT OF BOUND.\n");
+    //throw new ArrayIndexOutOfBoundsException("TRAY LIST OUT OF BOUND.\n");
+    return null;
   }
 
   /**
@@ -198,9 +199,10 @@ public class VendingMachine extends Observable{
    * @return TOTAL PRICE IN BIGDECIMAL TYPE
    */
   public BigDecimal calculate_total(ArrayList<Integer> item_list){
+    System.out.println(item_list.size());
     BigDecimal total = new BigDecimal(0.0);
     for(Integer i : item_list){
-      total = total.add(_tray_lists.get(i).get_item_price());
+      total = total.add(_tray_lists.get(i-1).get_item_price());
     }
     return total;
   }
@@ -237,7 +239,7 @@ public class VendingMachine extends Observable{
         // DELIVER
         ArrayList<Item> deliver_items = new ArrayList<>();
         for(Integer i : selected_items){
-          deliver_items.add(_tray_lists.get(i).pop());
+          deliver_items.add(_tray_lists.get(i-1).pop());
         } // END FOR LOOP
 
         // RECORD TRANSACTION
@@ -346,6 +348,7 @@ public class VendingMachine extends Observable{
   ////////////////////////////// TESTING //////////////////////////////////////
   public static void main(String[] args) {
     VendingMachine vm = new VendingMachine(1, new DummyAccount(), new DummyDatabase());
+    VMGUI gui = new VMGUI(vm);
     //vm._display_collection();
     //System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<");
     //System.out.println("TEST get_item_info");
@@ -360,22 +363,22 @@ public class VendingMachine extends Observable{
     //}
     //System.out.println("<<<<<<<<<<<<<<<<<<<<<<<");
     //System.out.println("TEST calculate_total");
-    ArrayList<Integer> selected_items = new ArrayList<>();
-    selected_items.add(0);
-    selected_items.add(1);
-    selected_items.add(2);
-    selected_items.add(3);
-    selected_items.add(4);
-    selected_items.add(5);
-    selected_items.add(6);
-    selected_items.add(7);
-    selected_items.add(10);
+    //ArrayList<Integer> selected_items = new ArrayList<>();
+    //selected_items.add(0);
+    //selected_items.add(1);
+    //selected_items.add(2);
+    //selected_items.add(3);
+    //selected_items.add(4);
+    //selected_items.add(5);
+    //selected_items.add(6);
+    //selected_items.add(7);
+    //selected_items.add(10);
     //System.out.print("Total : ");
     //System.out.println(
     //    CurrencyConvertor.convert_to_USD_fmt(vm.calculate_total(selected_items))
     //);
     //System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<");
-    System.out.println("TEST check_out");
+    //System.out.println("TEST check_out");
     //ServiceCenter sc = null;
     //try {
     //  sc = new ServiceCenter("localhost", 8080);
@@ -399,6 +402,6 @@ public class VendingMachine extends Observable{
       e.printStackTrace();
     }
     vm.addObserver(sc);
-    vm.check_out("1", selected_items);
+    //vm.check_out("1", selected_items);
   }
 }
