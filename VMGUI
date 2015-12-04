@@ -1,10 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
 import javax.swing.*;
 
 public class VMGUI extends JFrame{
@@ -13,6 +11,7 @@ public class VMGUI extends JFrame{
   private JPasswordField password;
   private ArrayList<Integer> checkoutItems = new ArrayList<Integer>();
   private JCheckBox[] cBox = new JCheckBox[15];
+  
   public VMGUI(VendingMachine v){
     this.v = v;
     initialize();
@@ -35,7 +34,7 @@ public class VMGUI extends JFrame{
 
   /**
    * North part of layout.
-   * @return JLabel
+   * @return JLabel with title "Vending Machine"
    */
   private JComponent header(){
     JLabel label = new JLabel("Vending Machine", JLabel.CENTER);
@@ -44,8 +43,8 @@ public class VMGUI extends JFrame{
   }
   
   /**
-   * The Log In part part of the JFrame
-   * @return JPanel that contains ID, PW, and LogIn Button
+   * The South part of layout
+   * @return JPanel that contains ID, PW, Log In Button, Log Out Button, Clear Button, and Status
    */
   private JComponent logIn(){
     JPanel panel = new JPanel();
@@ -54,7 +53,7 @@ public class VMGUI extends JFrame{
     JLabel enterPW = new JLabel("Enter PW");
     
     id = new JTextField("001234567");
-    password = new JPasswordField("        ");
+    password = new JPasswordField("         ");
     JButton logIn = new JButton("Log In");
     JButton clear = new JButton("Clear");
     JButton logOut = new JButton("Log Out");
@@ -63,25 +62,26 @@ public class VMGUI extends JFrame{
     
     ActionListener logInListener = new ActionListener(){
       public void actionPerformed(ActionEvent event){
-        char[] input = password.getPassword();
-        //System.out.println("[" + id.getText() + "]");
-        //System.out.println("[" + String.valueOf(input) + "]");
         if(checkLogIn() == false){
           JOptionPane.showMessageDialog(null, "Incorrect ID or Password", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else{
-          JOptionPane.showMessageDialog(null, "Log In Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-          Arrays.fill(input, '0');
+          JOptionPane.showMessageDialog(null, "Log In Successful", "Success", JOptionPane.INFORMATION_MESSAGE);       
         }
       }
     };
     
     ActionListener logOutListener = new ActionListener(){
-        public void actionPerformed(ActionEvent event){
-        	id.setText("001234567");
-        	password.setText("        ");
-        	status.setText("Status: Not Logged In");
-        	JOptionPane.showMessageDialog(null, "Log Out Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+      public void actionPerformed(ActionEvent event){
+        if(checkLogIn() == true){
+          id.setText("001234567");
+          password.setText("         ");
+          status.setText("Status: Not Logged In");
+          JOptionPane.showMessageDialog(null, "Log Out Successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+       	  JOptionPane.showMessageDialog(null, "Please Log In First", "Error", JOptionPane.ERROR_MESSAGE);
+        }
        }
      };
        
@@ -89,20 +89,20 @@ public class VMGUI extends JFrame{
       public void actionPerformed(ActionEvent event){
         id.setText("");
         password.setText("");
-        for (int i = 1; i < 13; i++){
+        for (int i = 1; i < v.get_tray_item_info().size() + 1; i++){
           cBox[i].setSelected(false);
         }
       }
     };
     
     ActionListener statusListener = new ActionListener(){
-        public void actionPerformed(ActionEvent event){
-      	  if(checkLogIn() == true){
-      		status.setText("Status: Logged in");
-      	  }
-      	  else{
-      		status.setText("Status: Not Logged In");
-       }
+      public void actionPerformed(ActionEvent event){
+        if(checkLogIn() == true){
+      	  status.setText("Status: Logged in");
+      }
+        else{
+          status.setText("Status: Not Logged In");
+        }
       }
     };
     
@@ -135,7 +135,8 @@ public class VMGUI extends JFrame{
     return panel;
   }
   /**
-   * Display pictures and item name
+   * West part of layout
+   * Display check boxes, pictures, and item name
    * @return grid layout containing all the items
    */
   private JComponent itemGrid(){
@@ -147,20 +148,20 @@ public class VMGUI extends JFrame{
       JTextField[] names = new JTextField[15];
       ArrayList<ItemInfoTuple> item_list = v.get_tray_item_info();
 
-      for (int i = 1; i < 13; i++){ 
+      for (int i = 1; i < v.get_tray_item_info().size() + 1; i++){ 
     	
     	ActionListener boxL = new ActionListener(){
           public void actionPerformed(ActionEvent event){
             int i = 1;
       
-            while (i < 13){
+            while (i < v.get_tray_item_info().size() + 1){
               if(cBox[i].isSelected()){
                 if(!checkoutItems.contains(i)){
-                	checkoutItems.add(i);
-                    i++;
+                  checkoutItems.add(i);
+                  i++;
                 }
                 else{
-                	i++;
+                  i++;
                 }
               }
               else if (!cBox[i].isSelected()){
@@ -171,7 +172,6 @@ public class VMGUI extends JFrame{
                 	  iterator.remove();
                 	}
                   } //END FOR
-                  //i++;
                 }
                 else{
                   i++;
@@ -184,10 +184,7 @@ public class VMGUI extends JFrame{
         cBox[i].addActionListener(boxL);
         grid.add(cBox[i]);
         
-        
-        ImageIcon icon = new ImageIcon(
-            item_list.get(i-1).get(Index.ICON_DIRECTORY)
-        );
+        ImageIcon icon = new ImageIcon(item_list.get(i-1).get(Index.ICON_DIRECTORY));
         
         images[i] = new JLabel(icon);
         images[i].setToolTipText(v.get_item_info(i-1));
@@ -213,20 +210,26 @@ public class VMGUI extends JFrame{
   }
 
   /**
-   * A checkout button
-   * @return JPanel with checkout button
+   * East part of layout
+   * @return JPanel with checkout button, balance, and refresh balance button
    */
   private JComponent checkout(){
     try{
       JPanel panel = new JPanel();
       panel.setLayout(new FlowLayout());
-      
+      Student s = new Student();
       JTextField balance = new JTextField("Balance: $0.00    ");
       balance.setEditable(false);
       ActionListener balanceL = new ActionListener(){
         public void actionPerformed(ActionEvent event){  
           if(checkLogIn() == true){
-        	  balance.setText("Balance: $10.00"); 
+            try {
+              balance.setText("Balance: " + s.getBal(getID()));
+			  System.out.println(s.getBal(getID()));
+			} 
+            catch(Exception e) {
+              e.printStackTrace();
+			} 
           }
         }
       };
@@ -234,19 +237,28 @@ public class VMGUI extends JFrame{
       refreshBalance.addActionListener(balanceL);
       
       JButton checkoutButton = new JButton("Checkout");
-      ActionListener bL = new ActionListener(){
+      ActionListener checkoutL = new ActionListener(){
         public void actionPerformed(ActionEvent event){
           if(checkLogIn() == true){
-        	  v.check_out(id.getText(), checkoutItems);
-              System.out.println(checkoutItems);
+            try {
+			  if(s.getBal(getID()) < (v.calculate_total(checkoutItems).doubleValue())){
+		  	    JOptionPane.showMessageDialog(null, "Not Enough Money", "Balance Error", JOptionPane.ERROR_MESSAGE);
+			  }
+			  else{
+			    v.check_out(id.getText(), checkoutItems);
+		        System.out.println(checkoutItems);
+			  }
+            } 
+            catch (Exception e) {
+		      e.printStackTrace();
+            }
           }
           else{
-        	  JOptionPane.showMessageDialog(null, "Please Log In First", "Log In Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please Log In First", "Log In Error", JOptionPane.ERROR_MESSAGE);
           }
-          
         }
       };
-      checkoutButton.addActionListener(bL);
+      checkoutButton.addActionListener(checkoutL);
       
       panel.add(checkoutButton);
       panel.add(balance);
@@ -280,16 +292,16 @@ public class VMGUI extends JFrame{
   }
   /**
    * Checks if Log In info is correct
-   * @return true is correct. False is incorrect
+   * @return true if correct. False if incorrect
    */
   private boolean checkLogIn(){
-	  char[] input = password.getPassword();
-      if(v.log_in(id.getText(), String.valueOf(input)) == true){
-    	  return true;
-      }
-      else{
-    	  return false;
-      }
+    char[] input = password.getPassword();
+    if(v.log_in(id.getText(), String.valueOf(input)) == true){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
-
+  
 }
